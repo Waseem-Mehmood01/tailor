@@ -124,7 +124,7 @@ if (isset($_POST['btnsubmit'])) {
                 <h2 class="contact-title">Get in Touch</h2>
             </div>
             <div class="col-lg-8">
-                <form class="form-contact contact_form" action="" method="post" id="contactForm" novalidate="novalidate">
+                <form class="" action="" method="post" id="" novalidate="novalidate">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">

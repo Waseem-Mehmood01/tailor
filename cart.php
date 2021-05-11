@@ -270,7 +270,7 @@ include_once 'layout/header.php';
 <div class="cart-empty">
 					<p>You have no items in your shopping cart.</p>
 					<p>
-						Click <a href="/index">here</a> to continue shopping.
+						Click <a class="genric-btn link-border circle" href="/index">here</a> to continue shopping.
 					</p>
 				</div>
 <?php } ?>
