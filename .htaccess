@@ -1,0 +1,19 @@
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+
+
+RewriteRule ^([^.?]+)$ %{REQUEST_URI}.php [L]
+RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
+
+RewriteRule .* - [L,R=404]
+
+RewriteRule (^|/)\. - [F]
+RewriteRule ^p/(.*)/([0-9]+) product.php?name=$1&product_id=$2 [L]
+
+ErrorDocument 404 /404.php/
+
+RewriteRule ^getimage/(.*)$ r_imgs?thumb=$1 [E=cache-control:max-age=180000]
+RewriteCond %{REQUEST_URI} !^(.*)/images/files(.*)$
+RewriteCond %{REQUEST_URI} !\.(gif)$ [NC]
+RewriteRule ^shop/([0-9]+) shop.php?page=$1 [L]
