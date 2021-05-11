@@ -82,7 +82,7 @@ foreach ($result as $key => $value) {
 ?>
 <!-- Content Header (Page header) -->
 <section class="content-header">
-	<h1>SmokeShop | Home
+	<h1><?php echo $_SESSION['company_name']; ?> | Home
            <?php // echo $_SESSION['company_name']; ?>
             <small> </small>
 	</h1>

@@ -3,9 +3,9 @@
     <!-- Logo -->
     <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>S</b>moke</span>
+      <span class="logo-mini"><?php echo $_SESSION['company_name']; ?></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Smoke</b>Shop<?php //echo $_SESSION['company_name']; ?></span>
+      <span class="logo-lg"><?php echo $_SESSION['company_name']; ?></span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->

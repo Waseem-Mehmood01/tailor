@@ -173,6 +173,24 @@ function parseTree($root, $arr)
     return empty($return) ? null : $return;
 }
 
+function get_prev_orders($customers_id)
+{
+    $prev_ord = DB::queryFirstField("SELECT COUNT(o.`orders_id`) FROM customers c LEFT JOIN orders o ON(o.`customers_id` = c.`customers_id`)
+  WHERE c.`customers_id`='" . (int) trim($customers_id) . "' AND c.`contact` != ''");
+    return $prev_ord;
+}
+
+function get_order_status_name($status_id)
+{
+    $status = DB::queryFirstField("SELECT status_name FROM orders_status WHERE orders_status_id = '" . $status_id . "'");
+    return $status;
+}
+
+function get_customer_name($customers_id)
+{
+    $row = DB::queryFirstRow("SELECT fname,lname FROM customers WHERE customers_id = '" . $customers_id . "'");
+    return $row['fname'] . ' ' . $row['lname'];
+}
 function printTree($arr)
 {
     if (! is_null($arr) && count($arr) > 0) {

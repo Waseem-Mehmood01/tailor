@@ -8,11 +8,9 @@ include_once 'layout/header.php';
  */
 
 if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email'])) {
-    
-  
-    
+
     $product_html = '';
-    
+
     if ($_POST['form_key'] == sha1("waseem")) {
         $subsc = 0;
         if (isset($_POST['newsletter'])) {
@@ -20,55 +18,76 @@ if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email
         }
         $_POST = array_map('cleanVar', $_POST);
         @extract($_POST);
-        
 
-        
-        $country = DB::queryFirstField("SELECT c.`name` FROM countries c WHERE c.`id` = '" . $country . "'");
-        
-        DB::insert("customers", array(
-            'fname' => $fname,
-            'lname' => $lname,
-            'email' => $email,
-            'contact' => $contact,
-            'card_no' => $card_no,
-            'card_expiry' => $card_exp,
-            'card_csv' => $card_csc,
-            'address' => $address,
-            'city' => $city,
-            'state' => $state,
-            'zip' => $zip,
-            'country' => $country,
-            'newsletter' => $subsc
-        ));
-        
-        $customers_id = DB::insertId();
-        
+        // $country = DB::queryFirstField("SELECT c.`name` FROM countries c WHERE c.`id` = '" . $country . "'");
+
+        if (isset($_SESSION['customers_id'])) {
+            DB::update("customers", array(
+                'fname' => $fname,
+                'lname' => $lname,
+                'email' => $email,
+                'contact' => $contact,
+                'card_no' => $card_no,
+                'card_expiry' => $card_exp,
+                'card_csv' => $card_csc,
+                'address' => $address,
+                'city' => $city,
+                'state' => $state,
+                'zip' => $zip,
+                'country' => $country,
+                'newsletter' => $subsc
+            ), 'customers_id=%s', $_SESSION['customers_id']);
+
+            $customers_id = $_SESSION['customers_id'];
+        } else {
+
+            DB::insert("customers", array(
+                'fname' => $fname,
+                'lname' => $lname,
+                'email' => $email,
+                'contact' => $contact,
+                'card_no' => $card_no,
+                'card_expiry' => $card_exp,
+                'card_csv' => $card_csc,
+                'address' => $address,
+                'city' => $city,
+                'state' => $state,
+                'zip' => $zip,
+                'country' => $country,
+                'newsletter' => $subsc
+            ));
+
+            $customers_id = DB::insertId();
+        }
+
         DB::insert("orders", array(
             'customers_id' => $customers_id,
             'orders_status_id' => '1',
             'sub_total' => $total,
             'tax_amount' => '0.00',
-            'order_total' => $total
+            'order_total' => $total,
+            'phoneid'   => 'web'
         ));
-        
+
         $orders_id = DB::insertId();
-        
+
         foreach ($_SESSION["cart_item"] as $item) {
             $price = 0.00;
             $subTotal = 0.00;
-            
+
             if ($item['products_price_id'] == '') {
                 $attr = DB::queryFirstRow("SELECT pp.`products_price_id`, pp.`size`, pp.`sale_price` FROM products_price pp WHERE pp.`products_id` = '" . $item['product_id'] . "' ORDER BY pp.`products_price_id`");
             } else {
                 $attr = DB::queryFirstRow("SELECT pp.`products_price_id`, pp.`size`, pp.`sale_price` FROM products_price pp WHERE pp.`products_id` = '" . $item['product_id'] . "' AND pp.`products_price_id` = '" . $item['products_price_id'] . "' ");
             }
             $price = $attr['sale_price'];
-            
+
             $subTotal = round($price * (int) $item["quantity"], 2);
-            
+
             DB::insert("orders_products", array(
                 'orders_id' => $orders_id,
                 'products_id' => $item['product_id'],
+                'name' => get_product_name($item['product_id']),
                 'products_price_id' => $item['products_price_id'],
                 'size' => $item['size'],
                 'color' => $item['color'],
@@ -79,7 +98,7 @@ if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email
                 'qty' => (int) $item["quantity"],
                 'total' => $subTotal
             ));
-            
+
             $product_html .= ' <tr>
       <td class="product">
         <div class="product-img"><img style="max-width: 150px;" src="' . SITE_URL . '/images/products/' . get_product_img($item['product_id']) . '"></div>
@@ -90,7 +109,7 @@ if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email
       <td class="price">' . $subTotal . '</td>
     </tr>';
         }
-        
+
         echo '<script>
               
             
@@ -99,12 +118,10 @@ if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email
     }
 }
 
-
-
 if (isset($_SESSION['customers_id'])) {
-    
+
     $customer = DB::queryFirstRow("SELECT * FROM customers c WHERE c.`customers_id` = '" . $_SESSION['customers_id'] . "'");
-    
+
     @extract($customer);
 }
 
@@ -150,33 +167,33 @@ if (! empty($_SESSION['cart_item'])) {
 			<div class="row">
 
 				<div class="container">
-<div class=" form-error-container alert-container"
-					style="display: none;">
-					<div class="error-body animated fadeIn">
-						<div class="message" id="errorLog"></div>
-						<i class="fa fa-exclamation-triangle"></i>
+					<div class=" form-error-container alert-container"
+						style="display: none;">
+						<div class="error-body animated fadeIn">
+							<div class="message" id="errorLog"></div>
+							<i class="fa fa-exclamation-triangle"></i>
+						</div>
+						<ul></ul>
 					</div>
-					<ul></ul>
-				</div>
 					<form class="" action="" method="POST" id="frmPlaceOrder"
-						name="frmPlaceOrder" >
-						
-						<div class="col-sm-8" style="float:left;">
+						name="frmPlaceOrder">
+
+						<div class="col-sm-8" style="float: left;">
 						<?php   if (!isset($_SESSION['customers_id'])) { ?>
-						<small class="pull-right">Already have an account <a href="<?php SITE_URL; ?>login" class="genric-btn link-border circle">Login</a></small>
+						<small class="pull-right">Already have an account <a
+								href="<?php SITE_URL; ?>login"
+								class="genric-btn link-border circle">Login</a></small>
 							<?php } ?>
 							<input name="form_key" type="hidden"
 								value="b61c3340d363bdcb3ec0b49462299d7c0f1cb01e">
 							<fieldset class="fieldset create info">
-								<legend class="legend">
-									Quick Checkout
-								</legend>
-								
-								<br> <?php 
-								
-								include 'layout/account_fields.php';
-								
-								?>
+								<legend class="legend"> Quick Checkout </legend>
+
+								<br> <?php
+
+    include 'layout/account_fields.php';
+
+    ?>
 								<!--  <div class="field required">
             <label for="card_no" class="label"><span>Credit Card No.</span></label>
             <div class="control">
@@ -194,7 +211,7 @@ if (! empty($_SESSION['cart_item'])) {
 							</fieldset>
 						</div>
 
-						<div class="col-sm-4" style="float:right;">
+						<div class="col-sm-4" style="float: right;">
 							<div class="cart-summary" style="top: 0px;">
 								<strong class="summary title">Your Order</strong>
 								<div id="cart-totals" class="cart-totals"
@@ -222,7 +239,7 @@ if (! empty($_SESSION['cart_item'])) {
 
         echo '<tr>';
         echo '<td style="padding-top: 5px; ">' . get_product_name($item['product_id']);
-       echo '<small>';
+        echo '<small>';
         if ($item['size'] != '') {
             echo '<br><i>Size: </i>' . $item['size'];
         }
@@ -241,7 +258,7 @@ if (! empty($_SESSION['cart_item'])) {
         echo '</small>';
         echo '</td>';
         echo '<td style="padding-top: 5px;">' . $item['quantity'] . '</td>';
-        echo '<td style="padding-top: 5px; text-align: right; color: #48b98c; font-size: 18px; font-weight:600;">' . DEFAULT_PRICE.floatval($price) . '</td>';
+        echo '<td style="padding-top: 5px; text-align: right; color: #48b98c; font-size: 18px; font-weight:600;">' . DEFAULT_PRICE . floatval($price) . '</td>';
         echo '</tr>';
     }
 
@@ -267,8 +284,8 @@ if (! empty($_SESSION['cart_item'])) {
 													<td data-bind="attr: {'data-th': title}" class="amount"
 														data-th="Order Total"><strong><span class="price"
 															data-bind="text: getValue()"><?php echo DEFAULT_PRICE.floatval($total); ?></span></strong>
-													<input type="hidden" name="total" value="<?php echo $total; ?>">
-													</td>
+														<input type="hidden" name="total"
+														value="<?php echo $total; ?>"></td>
 												</tr>
 												<tr style="border-top: #FFF;">
 													<td colspan="2" style="border-top: #FFF;"><h4>
@@ -333,13 +350,13 @@ if (! empty($_SESSION['cart_item'])) {
 							</div>
 						</div>
 
-						
-								<button type="button" id="confirmOrder"
-									data-role="proceed-to-checkout" title="CHECKOUT"
-									class="action genric-btn primary checkout">
-									<span><i class="fa fa-paper-plane"></i> Place Order</span>
-								</button>
-							
+
+						<button type="button" id="confirmOrder"
+							data-role="proceed-to-checkout" title="CHECKOUT"
+							class="action genric-btn primary checkout">
+							<span><i class="fa fa-paper-plane"></i> Place Order</span>
+						</button>
+
 					</form>
 
 				</div>
@@ -349,8 +366,7 @@ if (! empty($_SESSION['cart_item'])) {
 			
 			<?php
 } else {
-    
-    
+
     echo '<script>
                
                  location.href = "/index";

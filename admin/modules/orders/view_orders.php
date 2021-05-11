@@ -156,7 +156,7 @@ foreach ($res as $row) {
     $tbl->addCell(strtoupper($row['order_type']));
     $tbl->addCell($row['fname'] . ' ' . $row['lname']);
     $tbl->addCell($row['email']);
-    $tbl->addCell($row['customer_phone']);
+    $tbl->addCell($row['contact']);
     $tbl->addCell($row['tender']);
     $tbl->addCell($row['order_total']);
     $oStatus = DB::queryFirstField("SELECT os.`status_name` FROM orders_status os WHERE os.`orders_status_id` = '" . $row['orders_status_id'] . "'");

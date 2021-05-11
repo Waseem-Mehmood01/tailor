@@ -3,8 +3,6 @@ include_once 'functions.php';
 
 include_once 'layout/header.php';
 
-$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-$captcha = substr(str_shuffle($permitted_chars), 0, 5);
 
 function get_client_ip()
 {
@@ -30,7 +28,7 @@ $error_msg = '';
 $success_msg = '';
 $frmsubmit = FALSE;
 if (isset($_POST['btnsubmit'])) {
-    if ($_POST['formid'] == $_POST['captcha']) {
+   
 
         $name = isset($_POST['name']) ? cleanVar($_POST['name']) : '';
         $phone = isset($_POST['phone']) ? cleanVar($_POST['phone']) : '';
@@ -70,9 +68,7 @@ if (isset($_POST['btnsubmit'])) {
         } else {
             $frmsubmit = FALSE;
         }
-    } else {
-        $error_msg = 'Captcha validation error';
-    }
+   
 }
 
 ?>
@@ -105,6 +101,24 @@ if (isset($_POST['btnsubmit'])) {
 <section class="contact-section">
     <div class="container">
  
+ 
+         <?php if($error_msg<>''): ?>
+        
+        <div class="alert alert-danger">
+					<strong>Sorry! </strong> <?php echo $error_msg; ?>.
+</div>
+        
+        <?php endif; ?>
+        
+                <?php if($success_msg<>''): ?>
+        
+        <div class="alert alert-success">
+					<strong>Success! </strong> <?php echo $success_msg; ?>.
+</div>
+        
+        <?php endif; ?>
+        
+        
         <div class="row">
             <div class="col-12">
                 <h2 class="contact-title">Get in Touch</h2>
@@ -127,14 +141,10 @@ if (isset($_POST['btnsubmit'])) {
                                 <input class="form-control valid" name="email" id="email" type="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'" placeholder="Email">
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <input class="form-control" name="subject" id="subject" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Subject'" placeholder="Enter Subject">
-                            </div>
-                        </div>
+                       
                     </div>
                     <div class="form-group mt-3">
-                        <button type="submit" class="button button-contactForm boxed-btn">Send</button>
+                        <button type="submit" name="btnsubmit" class="button button-contactForm boxed-btn">Send</button>
                     </div>
                 </form>
             </div>

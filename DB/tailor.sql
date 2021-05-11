@@ -120,9 +120,11 @@ CREATE TABLE `customers` (
   `newsletter` tinyint(1) NOT NULL DEFAULT 1,
   `rating` int(1) DEFAULT 0,
   PRIMARY KEY (`customers_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1559 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1561 DEFAULT CHARSET=latin1;
 
 /*Data for the table `customers` */
+
+insert  into `customers`(`customers_id`,`fname`,`lname`,`email`,`password`,`contact`,`card_no`,`card_expiry`,`card_csv`,`address`,`city`,`state`,`street`,`country`,`zip`,`created_on`,`newsletter`,`rating`) values (1559,'waseem','mehmood','waseem.mehmood01@gmail.com','admin','+923215551086','','',0,'PK LD','Lodhan','Baluchistan',NULL,'Pakistan',59320,'2021-05-11 13:56:59',0,0),(1560,'Frank','urbano','mehmood.waseem01@gmail.com','admin123','+923215',NULL,NULL,NULL,'17221 San Carlos Blvd','Fort Myers Beach','Alabama',NULL,'United States',33931,'2021-05-11 06:34:56',1,0);
 
 /*Table structure for table `discounts` */
 
@@ -209,9 +211,11 @@ CREATE TABLE `orders` (
   `is_paid` tinyint(1) NOT NULL DEFAULT 0,
   `customer_phone` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`orders_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=416 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=418 DEFAULT CHARSET=latin1;
 
 /*Data for the table `orders` */
+
+insert  into `orders`(`orders_id`,`phoneid`,`customers_id`,`orders_status_id`,`created_on`,`sub_total`,`tax_amount`,`order_total`,`order_type`,`pickup_time`,`tender`,`transaction_id`,`tip`,`discount`,`tender_amount`,`due_amount`,`delivery_charges`,`remarks`,`is_paid`,`customer_phone`) values (416,'web',1559,1,'2021-05-11 15:52:47',25.00,0.00,25.00,'delivery',NULL,'COD',NULL,'0.00',0.00,NULL,NULL,'0.00',NULL,0,NULL),(417,'web',1559,1,'2021-05-11 15:57:36',50.00,0.00,50.00,'delivery',NULL,'COD',NULL,'0.00',0.00,NULL,NULL,'0.00',NULL,1,NULL);
 
 /*Table structure for table `orders_products` */
 
@@ -233,10 +237,15 @@ CREATE TABLE `orders_products` (
   `options` text DEFAULT NULL,
   `product_type` tinyint(1) DEFAULT NULL,
   `customised_image` varchar(256) DEFAULT NULL,
+  `height` varchar(50) DEFAULT NULL,
+  `width` varchar(50) DEFAULT NULL,
+  `prod_note` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`orders_products_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=630 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=632 DEFAULT CHARSET=latin1;
 
 /*Data for the table `orders_products` */
+
+insert  into `orders_products`(`orders_products_id`,`orders_id`,`products_id`,`name`,`description`,`products_price_id`,`is_bid`,`size`,`color`,`price`,`qty`,`total`,`options`,`product_type`,`customised_image`,`height`,`width`,`prod_note`) values (630,416,1522,NULL,NULL,6809,0,'Medium','Red',25.00,1,25.00,NULL,NULL,NULL,'14','15','slim fit'),(631,417,1522,'Flutter Sleeve Zip Back Top & Buttoned High Waist Pants Set',NULL,6809,0,'Small','Red',25.00,2,50.00,NULL,NULL,NULL,'14','15','slim fit');
 
 /*Table structure for table `orders_status` */
 
@@ -521,7 +530,7 @@ CREATE TABLE `sa_companies` (
 
 /*Data for the table `sa_companies` */
 
-insert  into `sa_companies`(`company_id`,`company_name`,`company_db_prefix`,`company_address_1`,`company_address_2`,`city`,`country`,`currency`,`phone_1`,`phone_2`,`email`,`website`,`industry`,`company_time_zone`,`coa_levels`,`coa_level_1_label`,`coa_level_1_length`,`coa_level_2_label`,`coa_level_2_length`,`coa)level_3_label`,`coa_level_3_length`,`coa_level_4_label`,`coa_level_4_length`,`coa_level_5_label`,`coa_level_5_length`,`coa_level_6_label`,`coa_level_6_length`,`coa_level_7_label`,`coa_level_7_length`,`coa_level_8_label`,`coa_level_8_length`,`coa_level_9_label`,`coa_level_9_length`,`company_logo_home`,`company_logo_head`,`company_logo_icon`,`super_admin_user`,`super_admin_password`,`last_modified_by`,`last_modified_on`,`created_by`,`created_on`,`company_status`,`site_title`,`site_description`,`site_tags`,`meta_robots`) values (1,'Tailor Shop','test_','PAKISTAN','','LD','PK','USD','123456','949-573-7226','frank@smokinfranks.com','#','Sales','GMT',5,'company',1,'Main',2,'control',2,'sub-control',4,'Activity',5,NULL,0,NULL,0,NULL,0,NULL,0,'http://www.sky-valley-web-design.ca/images/250x400.gif','http://www.sky-valley-web-design.ca/images/250x150.gif','http://www.sky-valley-web-design.ca/images/100x100.gif','admin','admin','admin','2016-05-28 00:41:07','system','2016-05-28 22:41:07','active','Tailor Shop','Tailor Shop','Tailor Shop','index, follow');
+insert  into `sa_companies`(`company_id`,`company_name`,`company_db_prefix`,`company_address_1`,`company_address_2`,`city`,`country`,`currency`,`phone_1`,`phone_2`,`email`,`website`,`industry`,`company_time_zone`,`coa_levels`,`coa_level_1_label`,`coa_level_1_length`,`coa_level_2_label`,`coa_level_2_length`,`coa)level_3_label`,`coa_level_3_length`,`coa_level_4_label`,`coa_level_4_length`,`coa_level_5_label`,`coa_level_5_length`,`coa_level_6_label`,`coa_level_6_length`,`coa_level_7_label`,`coa_level_7_length`,`coa_level_8_label`,`coa_level_8_length`,`coa_level_9_label`,`coa_level_9_length`,`company_logo_home`,`company_logo_head`,`company_logo_icon`,`super_admin_user`,`super_admin_password`,`last_modified_by`,`last_modified_on`,`created_by`,`created_on`,`company_status`,`site_title`,`site_description`,`site_tags`,`meta_robots`) values (1,'Tailor Shop','test_','PAKISTAN','','LD','PK','USD','123456','+923215551086','waseem.mehmood01@gmail.com','#','Sales','GMT',5,'company',1,'Main',2,'control',2,'sub-control',4,'Activity',5,NULL,0,NULL,0,NULL,0,NULL,0,'http://www.sky-valley-web-design.ca/images/250x400.gif','http://www.sky-valley-web-design.ca/images/250x150.gif','http://www.sky-valley-web-design.ca/images/100x100.gif','admin','admin','admin','2016-05-28 00:41:07','system','2016-05-28 22:41:07','active','Tailor Shop','Tailor Shop','Tailor Shop','index, follow');
 
 /*Table structure for table `sa_test_users` */
 
