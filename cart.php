@@ -94,13 +94,29 @@ include_once 'layout/header.php';
 																		
                                 <?php if($item['size']<>''){ ?>Size:
 																		
-                                   <small> <?php echo $item['size']; ?></small> <?php } ?></div>
-																			<div class="col-xs-6">
+                                   <small> <?php echo $item['size']; ?></small> <?php } ?>
                                     <?php if($item['color']<>''){ ?>Color:
 																		
                                    <small> <?php echo $item['color']; ?></small> <?php } ?></div>
 
 																		</div>
+																		<div class="col-xs-12">
+																		<?php if($item['height']<>''){ ?>Height:
+																		
+                                   <small> <?php echo $item['height']; ?></small> <?php } ?>
+																		
+                                    <?php if($item['width']<>''){ ?>Width:
+																		
+                                   <small> <?php echo $item['width']; ?></small> <?php } ?></div>
+                                   
+                                   <div class="col-xs-12">
+																		<?php if($item['prod_note']<>''){ ?>Note:
+																		
+                                   <small> <?php echo $item['prod_note']; ?></small> <?php } ?>
+																		
+                                  </div>
+
+
 																	</div>
 																</div>
 															</div>
@@ -109,12 +125,11 @@ include_once 'layout/header.php';
 														</td>
 
 														<td class="col price" data-th="PRICE"><span
-															class="price-excluding-tax" data-label="Excl. Tax"> <span
-																class="cart-price"> <span class="price"><?php
+															class="cart-price"> <span class="price"><?php
             echo DEFAULT_PRICE . floatval($price);
             ?></span>
 
-															</span></td>
+														</span></td>
 
 														<td class="col qty" data-th="QTY">
 															<div class="field qty">
@@ -157,7 +172,8 @@ include_once 'layout/header.php';
 																<a style="color: #BE9278;" href="#" title="Remove item"
 																	data-item-id="<?php echo  $item['product_id']; ?>"
 																	class="action remove"> Remove </a>&nbsp;|&nbsp;<a
-																	href="#" title="Update Qty"  style="color: #BE9278;"> Update Qty </a>
+																	href="#" title="Update Qty" style="color: #BE9278;">
+																	Update Qty </a>
 															</div>
 														</td>
 													</tr>
@@ -167,8 +183,8 @@ include_once 'layout/header.php';
 											</table>
 										</div>
 										<div class="cart main actions">
-											<a class="action genric-btn link-border continue" href="/home" title="Keep Shopping">
-												<span>Keep Shopping</span>
+											<a class="action genric-btn link-border continue"
+												href="/home" title="Keep Shopping"> <span>Keep Shopping</span>
 											</a>
 											<!-- <button type="submit" name="update_cart_action"
 												data-cart-empty="" value="empty_cart" title="Empty Cart"

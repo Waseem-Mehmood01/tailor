@@ -85,7 +85,7 @@ $meta = getMetaTags($prodID);
                     </div>
                     <!-- left Btn -->
                     <div class="header-right-btn f-right d-none d-lg-block  ml-30">
-                        <div class="header-btn"><a href="<?php echo SITE_URL; ?>login"><i class="fa fa-user" aria-hidden="true"></i></a>&nbsp;<a href="<?php echo SITE_URL; ?>cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class='badge badge-warning' id='lblCartCount'> <?php if(!empty($_SESSION['cart_item'])){  echo '('.count($_SESSION['cart_item']).')'; } else { echo '0'; } ?> </span></a></div>
+                        <div class="header-btn"><a title="<?php if(isset($_SESSION['customers_fname'])) echo ucwords($_SESSION['customers_fname'].' '.$_SESSION['customers_lname']) ?>" href="<?php echo SITE_URL; ?>login"><i class="fa fa-user" aria-hidden="true"></i></a>&nbsp;<a href="<?php echo SITE_URL; ?>cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class='badge badge-warning' id='lblCartCount'> <?php if(!empty($_SESSION['cart_item'])){  echo '('.count($_SESSION['cart_item']).')'; } else { echo '0'; } ?> </span></a></div>
                     </div>
                 </div>          
                 <!-- Mobile Menu -->

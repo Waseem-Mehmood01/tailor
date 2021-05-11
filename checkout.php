@@ -21,7 +21,7 @@ if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email
         $_POST = array_map('cleanVar', $_POST);
         @extract($_POST);
         
-        $address = $address1 . ', ' . $address2;
+
         
         $country = DB::queryFirstField("SELECT c.`name` FROM countries c WHERE c.`id` = '" . $country . "'");
         
@@ -72,6 +72,9 @@ if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email
                 'products_price_id' => $item['products_price_id'],
                 'size' => $item['size'],
                 'color' => $item['color'],
+                'height' => $item['height'],
+                'width' => $item['width'],
+                'prod_note' => $item['prod_note'],
                 'price' => $price,
                 'qty' => (int) $item["quantity"],
                 'total' => $subTotal
@@ -94,6 +97,15 @@ if (isset($_POST['form_key']) and isset($_POST['fname']) and isset($_POST['email
                   window.location.href = "order_success?order_confirm=yes";
             ;</script>';
     }
+}
+
+
+
+if (isset($_SESSION['customers_id'])) {
+    
+    $customer = DB::queryFirstRow("SELECT * FROM customers c WHERE c.`customers_id` = '" . $_SESSION['customers_id'] . "'");
+    
+    @extract($customer);
 }
 
 ?>
@@ -148,128 +160,23 @@ if (! empty($_SESSION['cart_item'])) {
 				</div>
 					<form class="" action="" method="POST" id="frmPlaceOrder"
 						name="frmPlaceOrder" >
+						
 						<div class="col-sm-8" style="float:left;">
+						<?php   if (!isset($_SESSION['customers_id'])) { ?>
+						<small class="pull-right">Already have an account <a href="<?php SITE_URL; ?>login" class="genric-btn link-border circle">Login</a></small>
+							<?php } ?>
 							<input name="form_key" type="hidden"
 								value="b61c3340d363bdcb3ec0b49462299d7c0f1cb01e">
 							<fieldset class="fieldset create info">
 								<legend class="legend">
-									<span>Personal Information</span>
+									Quick Checkout
 								</legend>
-								<br> <input type="hidden" name="success_url" value=""> <input
-									type="hidden" name="error_url" value="">
-								<div class="field field-name-firstname required">
-									<label class="label" for="fname" required="required"> <span>First Name</span>
-									</label>
-									<div class="control">
-										<input type="text" id="fname" name="fname" value=""
-											title="First Name" class="single-input required-entry"
-											data-validate="{required:true}" autocomplete="off"
-											aria-required="true" required="required">
-									</div>
-								</div>
-								<div class="field field-name-lastname required">
-									<label class="label" for="lname"> <span>Last Name</span>
-									</label>
-									<div class="control">
-										<input type="text" id="lname" name="lname" value=""
-											title="Last Name" class="single-input required-entry"
-											data-validate="{required:true}" autocomplete="off"
-											aria-required="true">
-									</div>
-								</div>
-								<div class="field">
-									<label for="company" class="label"><span>Company Name(Optional)</span></label>
-									<div class="control">
-										<input type="text" name="company" id="company" value=""
-											title="Company" class="single-input" maxlength="30"
-											aria-required="true">
-									</div>
-								</div>
-								<div class="required default-select">
-									<label for="country" class="label"><span>Country</span></label>
-									
-											<select name="country" id="country" class="select2" style="width: 100%">
-            	<?php
-    $countries = DB::query("SELECT  c.`id`, c.`name` FROM countries c ORDER BY c.`name`");
-    foreach ($countries as $country) {
-        echo '<option value="' . $country['id'] . '"';
-        if ($country['id'] == 231)
-            echo 'SELECTED';
-        echo '>' . $country['name'] . '</option>';
-    }
-    ?>
-                </select>
-										
-								</div>
-								<div class="field field-name-firstname required">
-								<br>
-									<label class="label" for="address1"> <span>Street Address</span>
-									</label>
-									<div class="control">
-										<input type="text" id="address1" name="address1" value=""
-											title="Address" class="single-input required-entry"
-											required="required"
-											placeholder="House number and street name">
-									</div>
-								</div>
-								<div class="field field-name-lastname">
-									<label class="label" for="address2"> <span>&nbsp;</span>
-									</label>
-									<div class="control">
-										<input type="text" id="address2" name="address2" value=""
-											title="Address" class="single-input required-entry"
-											aria-required="true"
-											placeholder="Appartment, suite, unit etc (Optional)">
-									</div>
-								</div>
-								<div class="field required">
-									<label for="city" class="label"><span>Town / City</span></label>
-									<div class="control">
-										<input type="text" name="city" id="city" value=""
-											title="City Town" class="single-input" maxlength="25"
-											aria-required="true">
-									</div>
-								</div>
-								<div class="required">
-									<label for="state" class="label"><span>State</span></label>
 								
-										
-											<select name="state" id="state" class="select2" style="width: 100%">
-            	<?php
-    $states = DB::query("SELECT `name` FROM states s WHERE s.`country_id` = '231'");
-    foreach ($states as $st) {
-        echo '<option value="' . $st['name'] . '">' . $st['name'] . '</option>';
-    }
-    ?>
-                </select>
-										
-								</div>
-								<div class="field required">
-									<label for="zip" class="label"><span>Zip</span></label>
-									<div class="control">
-										<input type="tel" name="zip" id="zip" autocomplete="off"
-											value="" title="Zip Code" class="single-input" maxlength="10"
-											aria-required="true">
-									</div>
-								</div>
-								<div class="field required">
-									<label for="contact" class="label"><span>Phone</span></label>
-									<div class="control">
-										<input type="tel" name="contact" id="contact"
-											autocomplete="off" value="" title="Contact Number"
-											class="single-input" maxlength="11" aria-required="true">
-									</div>
-								</div>
-								<div class="field required">
-									<label for="email" class="label"><span>Email</span></label>
-									<div class="control">
-										<input type="email" name="email" id="email"
-											autocomplete="email" value="" title="Email"
-											class="single-input"
-											data-validate="{required:true, 'validate-email':true}"
-											aria-required="true">
-									</div>
-								</div>
+								<br> <?php 
+								
+								include 'layout/account_fields.php';
+								
+								?>
 								<!--  <div class="field required">
             <label for="card_no" class="label"><span>Credit Card No.</span></label>
             <div class="control">
@@ -315,12 +222,23 @@ if (! empty($_SESSION['cart_item'])) {
 
         echo '<tr>';
         echo '<td style="padding-top: 5px; ">' . get_product_name($item['product_id']);
+       echo '<small>';
         if ($item['size'] != '') {
             echo '<br><i>Size: </i>' . $item['size'];
         }
         if ($item['color'] != '') {
             echo '<br><i>Color: </i>' . $item['color'];
         }
+        if ($item['width'] != '') {
+            echo '<br><i>Width: </i>' . $item['width'];
+        }
+        if ($item['height'] != '') {
+            echo '<br><i>Height: </i>' . $item['height'];
+        }
+        if ($item['prod_note'] != '') {
+            echo '<br><i>Note: </i>' . $item['prod_note'];
+        }
+        echo '</small>';
         echo '</td>';
         echo '<td style="padding-top: 5px;">' . $item['quantity'] . '</td>';
         echo '<td style="padding-top: 5px; text-align: right; color: #48b98c; font-size: 18px; font-weight:600;">' . DEFAULT_PRICE.floatval($price) . '</td>';
@@ -450,12 +368,13 @@ if (! empty($_SESSION['cart_item'])) {
 
 $("#country").on("change", function(){
 			var contrID = $(this).val();
-			console.log(contrID);
+			
 			
 			$.ajax({
 					method: 'GET',
 					url: '<?php echo  SITE_URL; ?>ajax_get_country?country_id='+contrID,
 					success: function(data){
+				
 						$("#state").html(data);
 						}
 				});

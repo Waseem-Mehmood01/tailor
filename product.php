@@ -41,17 +41,17 @@ $default_price_id = DB::queryFirstField("SELECT  pp.`products_price_id` FROM pro
 <main>
 	<div class="container">
 		<section class="contact-section">
+			<form method="POST" action="" id="attrFrm">
+				<div class="row">
 
-			<div class="row">
+					<div class="container">
 
-				<div class="container">
-
-					<div class="row">
-						<div class="">
-							<div class="container-fliud">
-								<div class="wrapper row">
-									<div class="preview col-md-6">
-										<div class="preview-pic tab-content">
+						<div class="row">
+							<div class="">
+								<div class="container-fliud">
+									<div class="wrapper row">
+										<div class="preview col-md-6">
+											<div class="preview-pic tab-content">
 				<?php
     $i = 0;
     $images = DB::query("SELECT * FROM products_img WHERE products_id = '" . $products_id . "'");
@@ -74,36 +74,36 @@ $default_price_id = DB::queryFirstField("SELECT  pp.`products_price_id` FROM pro
 					
 				</div>
 
-									</div>
-									<div class="details col-md-6">
-										<h1 class="product-title"><?php echo $prodTitle; ?></h1>
-										<h1><?php echo DEFAULT_PRICE.floatval($default_price); ?></h1>
-										<br>
+										</div>
+										<div class="details col-md-6">
+											<h1 class="product-title"><?php echo $prodTitle; ?></h1>
+											<h1><?php echo DEFAULT_PRICE.floatval($default_price); ?></h1>
+											<br>
 
-										<div class="col-xs-12">
-											<span>Size: </span>
-											<div class="input-group-icon mt-10">
-												<div class="icon">
-													<i class="fa fa-child" aria-hidden="true"></i>
-												</div>
-												<div class="form-select" id="sizes">
-													<select name="sizes" class="nice-select">
+											<div class="col-xs-12">
+												<span>Size: </span>
+												<div class="input-group-icon mt-10">
+													<div class="icon">
+														<i class="fa fa-child" aria-hidden="true"></i>
+													</div>
+													<div class="form-select" id="sizes">
+														<select name="size" class="nice-select" id="size">
 																<?php
                 foreach ($attr as $sizes) {
-                    echo '<option value="' . $sizes['products_price_id'] . '">' . $sizes['size'] . '</option>';
+                    echo '<option value="' . $sizes['size'] . '">' . $sizes['size'] . '</option>';
                 }
                 ?>
 																</select>
+													</div>
 												</div>
+
 											</div>
 
-										</div>
+											<br>
 
-										<br>
-
-										<div class="col-xs-12">
-											<span>Color: </span><small><?php echo $default_color; ?></small>
-											<ul class="preview-thumbnail nav nav-tabs">
+											<div class="col-xs-12">
+												<span>Color: </span><small id="setcolor"><?php echo $default_color; ?></small>
+												<ul class="preview-thumbnail nav nav-tabs">
 				<?php
     $i = 0;
     $images = DB::query("SELECT * FROM products_img WHERE products_id = '" . $products_id . "'");
@@ -111,19 +111,19 @@ $default_price_id = DB::queryFirstField("SELECT  pp.`products_price_id` FROM pro
         echo '<li style="width: 55px; margin: 0px;" class="';
         if ($i == 0)
             echo ' active ';
-        echo '"><a title="' . $img['color'] . '" data-target="#pic-' . $img['products_img_id'] . '" data-toggle="tab"><img
+        echo '"><a class="color-picker" data-color="' . $img['color'] . '" title="' . $img['color'] . '" data-target="#pic-' . $img['products_img_id'] . '" data-toggle="tab"><img
 							src="' . SITE_URL . 'getimage/50x50/products/' . $img['img_path'] . '" alt="' . $prodTitle . '-thumb' . '" /></a></li>';
         $i ++;
     }
     ?>
 					
 				</ul>
-										</div>
-										<br>
-										<div class="col-xs-12">
+											</div>
+											<br>
+											<div class="col-xs-12">
 
 
-											<form method="POST" action="" id="attrFrm">
+
 												<input type="hidden" name="name"
 													value="<?php echo str_replace(' ', '-', $product['name']); ?>">
 												<input type="hidden" name="product"
@@ -152,30 +152,52 @@ $default_price_id = DB::queryFirstField("SELECT  pp.`products_price_id` FROM pro
 												</div>
 
 												<div class="col-xs-6">&nbsp;</div>
-										
-										</div>
-										<br>
-										<div class="clear-fix"></div>
-										<div class="col-xs-12">
-											<input type="hidden" name="color"
-												value='<?php echo $default_color ?>' id="color" /> <input
-												type="hidden" name="token" id="token"
-												value="b61c3340d363bdcb3ec0b49462299d7c0f1cb01"> <input
-												type="hidden" name="action" id="action" value="addCart"> <input
-												type="hidden" name="products_price_id"
-												id="products_price_id"
-												value="<?php echo $default_price_id; ?>"> <input
-												type="hidden" name="product_id" id="product_id"
-												value="<?php echo $products_id; ?>" />
-											<!-- <input type="hidden" name="quantity" id="quantity" value="1" /> -->
-											<input type="hidden" name="size" id="size"
-												value="<?php echo $default_size; ?>" />
 
-											<button id="addBag" onclick="event.preventDefault()"
-												data-role="proceed-to-checkout"
-												class="genric-btn primary circle checkout">
-												Add to cart <i class="fa fa-arrow-right"></i>
-											</button>
+											</div>
+
+											<div class="clear-fix"></div>
+											<div class="col-xs-12">
+												<p>Measurement</p>
+												<div class="form-inline">
+													<span><small>Height:</small> <input type="text" value=""
+														name="height" style="max-width: 80px;" placeholder="inch"></span>&nbsp;&nbsp;
+													<span><small>Width:</small> <input type="text" value=""
+														name="width" style="max-width: 80px;" placeholder="inch"></span>
+												</div>
+											</div>
+											<br>
+											<div class="clear-fix"></div>
+											<div class="col-xs-12">
+												<p>Special Note:</p>
+												<div class="form-inline">
+													<span><textarea class="single-textarea" name="prod_note"
+															placeholder="___"></textarea></span>
+												</div>
+											</div>
+											<br>
+											<div class="clear-fix"></div>
+											<div class="col-xs-12">
+												<input type="hidden" name="color"
+													value='<?php echo $default_color ?>' id="color" /> <input
+													type="hidden" name="token" id="token"
+													value="b61c3340d363bdcb3ec0b49462299d7c0f1cb01"> <input
+													type="hidden" name="action" id="action" value="addCart"> <input
+													type="hidden" name="products_price_id"
+													id="products_price_id"
+													value="<?php echo $default_price_id; ?>"> <input
+													type="hidden" name="product_id" id="product_id"
+													value="<?php echo $products_id; ?>" />
+												<!-- <input type="hidden" name="quantity" id="quantity" value="1" /> -->
+
+
+												<button id="addBag" onclick="event.preventDefault()"
+													data-role="proceed-to-checkout"
+													class="genric-btn primary circle checkout">
+													Add to cart <i class="fa fa-arrow-right"></i>
+												</button>
+
+											</div>
+
 
 										</div>
 									</div>
@@ -183,10 +205,10 @@ $default_price_id = DB::queryFirstField("SELECT  pp.`products_price_id` FROM pro
 							</div>
 						</div>
 					</div>
+
 				</div>
-				</form>
-			</div>
-			<p class="product-description"><?php echo html_entity_decode(strip_tags($products['description1'])); ?></p>
+				<p class="product-description"><?php echo html_entity_decode(strip_tags($products['description1'])); ?></p>
+			</form>
 		</section>
 	</div>
 </main>
@@ -234,17 +256,17 @@ $default_price_id = DB::queryFirstField("SELECT  pp.`products_price_id` FROM pro
 
 $(document).ready(function(){
 
-var quantitiy=1;
+var quantitiy=0;
    $('.quantity-right-plus').click(function(e){
         
         // Stop acting like a button
         e.preventDefault();
         // Get the field name
-        var quantity = parseInt($('#quantity').val());
+        var quantity = parseInt($('#qty').val());
         
         // If is not undefined
             
-            $('#quantity').val(quantity + 1);
+            $('#qty').val(quantity + 1);
 
           
             // Increment
@@ -255,13 +277,13 @@ var quantitiy=1;
         // Stop acting like a button
         e.preventDefault();
         // Get the field name
-        var quantity = parseInt($('#quantity').val());
+        var quantity = parseInt($('#qty').val());
         
         // If is not undefined
       
             // Increment
             if(quantity>0){
-            $('#quantity').val(quantity - 1);
+            $('#qty').val(quantity - 1);
             }
     });
     
@@ -301,6 +323,16 @@ btnAdd.onclick = function() {
 			   });
 	
 }
+
+$(".color-picker").on("click change", function(){
+
+	var Color = $(this).data("color");
+	console.log(Color);
+	$("#color").val(Color);
+	$("#setcolor").html(Color);
+
+});
+
 /*
 spanClose.onclick = function() {
 	modalAdd.style.display = "none";
